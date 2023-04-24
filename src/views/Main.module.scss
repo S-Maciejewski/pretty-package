@@ -1,0 +1,28 @@
+.main-view {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.toolbar {
+}
+
+.content {
+  display: flex;
+  flex-direction: row;
+
+  & > * {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+}
+
+.controls {
+
+}
+
+.output {
+  white-space: pre-wrap;
+  text-align: left;
+}

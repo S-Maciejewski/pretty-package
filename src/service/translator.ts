@@ -16,48 +16,75 @@ export type TableObject = {
 
 export const translate = (packageJsonContent: string, options: Options) => {
     const tableObject = getTableObject(packageJsonContent, options)
-    return getTable(tableObject, options)
+    if (tableObject === false) {
+        return 'Could not parse package.json'
+    }
+    return getTable(tableObject as TableObject, options)
 }
 
-export const getTableObject = (packageJsonContent: string, options: Options): TableObject => {
-    const packageJson = JSON.parse(packageJsonContent)
+const getTableObject = (packageJsonContent: string, options: Options): TableObject | boolean => {
+    try {
+        const packageJson = JSON.parse(packageJsonContent)
 
-    const dependencies: string[] = Object.keys(packageJson.dependencies)
-    const devDependencies: string[] = []
+        const dependencies: string[] = Object.keys(packageJson.dependencies)
+        const devDependencies: string[] = []
 
-    const table: TableObject = {name: dependencies}
+        const table: TableObject = {name: dependencies}
 
-    if (options.includeDevDependencies) {
-        devDependencies.push(...Object.keys(packageJson.devDependencies))
-        table.name.push(...devDependencies)
-        table.type = table.name.map(name => dependencies.includes(name) ? 'prod' : 'dev')
+        if (options.includeDevDependencies) {
+            if (packageJson.devDependencies) {
+                devDependencies.push(...Object.keys(packageJson.devDependencies))
+                table.name.push(...devDependencies)
+                table.type = table.name.map(name => dependencies.includes(name) ? 'prod' : 'dev')
+            } else {
+                console.warn('No devDependencies found in package.json')
+            }
+
+        }
+
+        if (options.includeVersion) {
+            table.version = table.name.map(name => packageJson.dependencies[name] || packageJson.devDependencies[name])
+        }
+
+        // TODO: async get license and url
+        if (options.includeUrl) {
+            table.url = []
+        }
+        if (options.includeLicense) {
+            table.license = []
+        }
+
+        console.table(table)
+        return table
+    } catch (e) {
+        console.error('Could not parse package.json')
+        return false
     }
-
-    if (options.includeVersion) {
-        table.version = table.name.map(name => packageJson.dependencies[name] || packageJson.devDependencies[name])
-    }
-
-    // TODO: async get license and url
-    if (options.includeUrl) {
-        table.url = []
-    }
-    if (options.includeLicense) {
-        table.license = []
-    }
-
-    console.table(table)
-    return table
 }
 
-export const getTable = (tableObject: TableObject, options: Options): string => {
-    // TODO: markdown or csv depending on options.markdown
+const getTable = (tableObject: TableObject, options: Options): string => {
+    if (options.markdown) {
+        return getMarkdownTable(tableObject)
+    } else {
+        return getCsvTable(tableObject)
+    }
+}
+
+const getMarkdownTable = (tableObject: TableObject): string => {
     const header = ` |  ${Object.keys(tableObject).join(' | ')}  | `
     const separator = ` | ${Object.keys(tableObject).map(() => '---').join(' | ')} | `
     const rows = tableObject.name.map((name, index) => {
         const row = Object.values(tableObject).map(value => value[index])
         return ` | ${row.join(' | ')} | `
     })
-    const table = [header, separator, ...rows].join('\n')
-    console.log(table)
-    return table
+    return [header, separator, ...rows].join('\n')
+}
+
+const getCsvTable = (tableObject: TableObject): string => {
+    const header = Object.keys(tableObject).join(',')
+    const rows = tableObject.name.map((name, index) => {
+        const row = Object.values(tableObject).map(value => value[index])
+        return row.join(',')
+    })
+    return [header, ...rows].join('\n')
 }

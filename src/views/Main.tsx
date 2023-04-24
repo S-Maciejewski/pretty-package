@@ -6,6 +6,7 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Box from '@mui/material/Box';
+import styles from './Main.module.scss'
 
 import {Options, translate} from "../service/translator";
 
@@ -26,11 +27,11 @@ export const MainView: React.FC = () => {
         // Make a full screen div with a toolbar at the top (with a logo and a menu button) and then two columns of equal width to a total of 100% width.
         // The left column should be a text input field with a button to submit at the bottom, the right should be an empty div.
 
-        <div className='main-view'>
-            <div className='toolbar'>
+        <div className={styles.mainView}>
+            <div className={styles.toolbar}>
                 <h1>Pretty Package</h1>
             </div>
-            <div className='content'>
+            <div className={styles.content}>
                 <div className='left'>
                     <TextareaAutosize
                         maxRows={40}
@@ -39,7 +40,7 @@ export const MainView: React.FC = () => {
                         value={packageJsonContent}
                         onChange={(event) => setPackageJsonContent(event.target.value)}
                     />
-                    <div className='controls'>
+                    <div className={styles.controls}>
                         <FormGroup>
                             <FormControlLabel
                                 control={<Checkbox checked={options.includeDevDependencies} onChange={e => setOptions({
@@ -84,9 +85,8 @@ export const MainView: React.FC = () => {
                     </div>
 
                 </div>
-                <div className='right'>
-                    {/*TODO: display respecting newlines*/}
-                    <Box component="span" sx={{ display: 'block' }}>{`${output}`}</Box>
+                <div className={styles.output}>
+                    <Box component="span" sx={{display: 'block'}}>{`${output}`}</Box>
                 </div>
             </div>
         </div>
