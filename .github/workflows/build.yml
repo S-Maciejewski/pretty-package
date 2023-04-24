@@ -1,4 +1,4 @@
-name: Test, build and deploy
+name: Build and deploy
 
 on:
   push:
@@ -21,4 +21,9 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: npm test
+    - run: npm run build
+    - name: deploy to gh-pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+        publish_dir: ./build

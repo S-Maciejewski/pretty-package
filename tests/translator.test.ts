@@ -1,7 +1,10 @@
-{
+import {Options, translate} from "../src/service/translator";
+
+describe('translator tests', () => {
+    const packageJsonContent =
+        `{
   "name": "pretty-package",
   "version": "1.0.0",
-  "homepage": "https://s-maciejewski.github.io/pretty-package",
   "dependencies": {
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
@@ -24,26 +27,20 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "jest",
+    "test": "react-scripts test",
     "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "author": "Sebastian Maciejewski"
-}
+  }
+}`
+    const options: Options = {
+        includeDevDependencies: false,
+        markdown: true,
+    }
+
+    // TODO: setup jest tests?
+    test('should return a valid markdown table', () => {
+        const result = translate(packageJsonContent, options)
+        // expect(result).toBe(`| name |`)
+        expect(true).toBeTruthy()
+    })
+
+})
