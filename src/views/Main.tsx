@@ -1,14 +1,26 @@
-import TextareaAutosize from '@mui/base/TextareaAutosize';
 import * as React from "react";
-import {Options, translateToTable} from "../service/translator";
+
+import TextareaAutosize from '@mui/base/TextareaAutosize';
+import Button from '@mui/material/Button';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Box from '@mui/material/Box';
+
+import {Options, translate} from "../service/translator";
 
 export const MainView: React.FC = () => {
-    const options: Options = {
+    const defaultOptions: Options = {
         includeDevDependencies: true,
-        includeVersion: true,
+        includeVersion: false,
+        includeUrl: false,
+        includeLicense: false,
+        markdown: true,
     }
 
     const [packageJsonContent, setPackageJsonContent] = React.useState<string>('')
+    const [options, setOptions] = React.useState<Options>(defaultOptions)
+    const [output, setOutput] = React.useState<string>('')
 
     return (
         // Make a full screen div with a toolbar at the top (with a logo and a menu button) and then two columns of equal width to a total of 100% width.
@@ -21,20 +33,60 @@ export const MainView: React.FC = () => {
             <div className='content'>
                 <div className='left'>
                     <TextareaAutosize
-                        maxRows={4}
-                        aria-label="maximum height"
-                        placeholder="Maximum 4 rows"
-                        style={{width: 200}}
+                        maxRows={40}
+                        aria-label="input"
+                        style={{width: 600}}
                         value={packageJsonContent}
                         onChange={(event) => setPackageJsonContent(event.target.value)}
                     />
-                    <button onClick={() => {
-                        translateToTable(packageJsonContent, options)
-                    }}>Submit
-                    </button>
+                    <div className='controls'>
+                        <FormGroup>
+                            <FormControlLabel
+                                control={<Checkbox checked={options.includeDevDependencies} onChange={e => setOptions({
+                                    ...options,
+                                    includeDevDependencies: e.target.checked
+                                })}/>}
+                                label="Include dev dependencies"
+                            />
+                            <FormControlLabel
+                                control={<Checkbox checked={options.includeVersion} onChange={e => setOptions({
+                                    ...options,
+                                    includeVersion: e.target.checked
+                                })}/>}
+                                label="Include version"
+                            />
+                            <FormControlLabel
+                                control={<Checkbox checked={options.includeUrl} onChange={e => setOptions({
+                                    ...options,
+                                    includeUrl: e.target.checked
+                                })}/>}
+                                label="Include URL"
+                            />
+                            <FormControlLabel
+                                control={<Checkbox checked={options.includeLicense} onChange={e => setOptions({
+                                    ...options,
+                                    includeLicense: e.target.checked
+                                })}/>}
+                                label="Include license"
+                            />
+                            <FormControlLabel
+                                control={<Checkbox checked={options.markdown} onChange={e => setOptions({
+                                    ...options,
+                                    markdown: e.target.checked
+                                })}/>}
+                                label="Output Markdown table"
+                            />
+                        </FormGroup>
+                        <Button variant="contained" onClick={() => {
+                            setOutput(translate(packageJsonContent, options))
+                        }}>Submit
+                        </Button>
+                    </div>
+
                 </div>
                 <div className='right'>
-                    output
+                    {/*TODO: display respecting newlines*/}
+                    <Box component="span" sx={{ display: 'block' }}>{`${output}`}</Box>
                 </div>
             </div>
         </div>
