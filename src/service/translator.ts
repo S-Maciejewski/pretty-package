@@ -1,3 +1,5 @@
+import {getPackageLicense} from "./metadataRetriever";
+
 export type Options = {
     includeDevDependencies?: boolean
     includeVersion?: boolean
@@ -14,15 +16,15 @@ export type TableObject = {
     url?: string[]
 }
 
-export const translate = (packageJsonContent: string, options: Options) => {
-    const tableObject = getTableObject(packageJsonContent, options)
+export const translate = async (packageJsonContent: string, options: Options): Promise<string> => {
+    const tableObject = await getTableObject(packageJsonContent, options)
     if (tableObject === false) {
         return 'Could not parse package.json'
     }
     return getTable(tableObject as TableObject, options)
 }
 
-const getTableObject = (packageJsonContent: string, options: Options): TableObject | boolean => {
+const getTableObject = async (packageJsonContent: string, options: Options): Promise<TableObject | boolean> => {
     try {
         const packageJson = JSON.parse(packageJsonContent)
 
@@ -35,26 +37,25 @@ const getTableObject = (packageJsonContent: string, options: Options): TableObje
             if (packageJson.devDependencies) {
                 devDependencies.push(...Object.keys(packageJson.devDependencies))
                 table.name.push(...devDependencies)
-                table.type = table.name.map(name => dependencies.includes(name) ? 'prod' : 'dev')
+                table.type = table.name.map(name => devDependencies.includes(name) ? 'dev' : 'prod')
             } else {
                 console.warn('No devDependencies found in package.json')
             }
-
         }
 
         if (options.includeVersion) {
             table.version = table.name.map(name => packageJson.dependencies[name] || packageJson.devDependencies[name])
         }
 
-        // TODO: async get license and url
         if (options.includeUrl) {
-            table.url = []
-        }
-        if (options.includeLicense) {
-            table.license = []
+            table.url = table.name.map(name => `https://www.npmjs.com/package/${name}`)
         }
 
-        console.table(table)
+        if (options.includeLicense) {
+            const licensePromises = table.name.map(name => getPackageLicense(name))
+            table.license = await Promise.all(licensePromises)
+        }
+
         return table
     } catch (e) {
         console.error('Could not parse package.json')

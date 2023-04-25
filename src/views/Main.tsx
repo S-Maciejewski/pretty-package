@@ -22,8 +22,10 @@ export const MainView: React.FC = () => {
     const [packageJsonContent, setPackageJsonContent] = React.useState<string>('')
     const [options, setOptions] = React.useState<Options>(defaultOptions)
     const [output, setOutput] = React.useState<string>('')
+    const [loading, setLoading] = React.useState<boolean>(false)
 
     return (
+        // TODO: styling
         // Make a full screen div with a toolbar at the top (with a logo and a menu button) and then two columns of equal width to a total of 100% width.
         // The left column should be a text input field with a button to submit at the bottom, the right should be an empty div.
 
@@ -78,14 +80,19 @@ export const MainView: React.FC = () => {
                                 label="Output Markdown table"
                             />
                         </FormGroup>
-                        <Button variant="contained" onClick={() => {
-                            setOutput(translate(packageJsonContent, options))
+                        <Button variant="contained" onClick={async () => {
+                            setLoading(true)
+                            setOutput(await translate(packageJsonContent, options))
+                            setLoading(false)
                         }}>Submit
                         </Button>
                     </div>
 
                 </div>
                 <div className={styles.output}>
+                    <h2>Output</h2>
+                    {loading && <p>Loading...</p>}
+                    {!loading && output && <p>Done!</p>}
                     <Box component="span" sx={{display: 'block'}}>{`${output}`}</Box>
                 </div>
             </div>
