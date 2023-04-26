@@ -26,8 +26,6 @@ export const MainView: React.FC = () => {
 
     return (
         // TODO: styling
-        // Make a full screen div with a toolbar at the top (with a logo and a menu button) and then two columns of equal width to a total of 100% width.
-        // The left column should be a text input field with a button to submit at the bottom, the right should be an empty div.
 
         <div className={styles.mainView}>
             <div className={styles.toolbar}>
