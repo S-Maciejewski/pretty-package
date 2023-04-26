@@ -6,6 +6,8 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Box from '@mui/material/Box';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import styles from './Main.module.scss'
 
 import {Options, translate} from "../service/translator";
@@ -33,8 +35,10 @@ export const MainView: React.FC = () => {
             </div>
             <div className={styles.content}>
                 <div className='left'>
+                    <h2>Input</h2>
                     <TextareaAutosize
-                        maxRows={40}
+                        minRows={20}
+                        maxRows={30}
                         aria-label="input"
                         style={{width: 600}}
                         value={packageJsonContent}
@@ -89,9 +93,21 @@ export const MainView: React.FC = () => {
                 </div>
                 <div className={styles.output}>
                     <h2>Output</h2>
-                    {loading && <p>Loading...</p>}
-                    {!loading && output && <p>Done!</p>}
-                    <Box component="span" sx={{display: 'block'}}>{`${output}`}</Box>
+                    {loading &&
+                        <div>
+                            <p>Loading...</p>
+                        </div>
+                    }
+                    {!loading && output &&
+                        <div>
+                            <div>
+                                <CopyToClipboard text={output}>
+                                    <Button variant="contained" endIcon={<ContentCopyIcon/>}>Copy to clipboard</Button>
+                                </CopyToClipboard>
+                            </div>
+                            <Box component="span" sx={{display: 'block'}}>{`${output}`}</Box>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
