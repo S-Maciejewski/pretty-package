@@ -6,11 +6,16 @@
 }
 
 .toolbar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
 }
 
 .content {
   display: flex;
   flex-direction: row;
+  align-content: center;
+  justify-content: center;
 
   & > * {
     margin-left: 10px;
@@ -25,4 +30,15 @@
 .output {
   white-space: pre-wrap;
   text-align: left;
+}
+
+.copyButton {
+  margin: 10px 0 20px 0;
+}
+
+.outputBox {
+  border: #282c34 1px solid;
+  border-radius: 4px;
+  padding: 8px;
+  display: block;
 }

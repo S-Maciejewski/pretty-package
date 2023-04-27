@@ -8,6 +8,7 @@ import Checkbox from '@mui/material/Checkbox';
 import Box from '@mui/material/Box';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import LockIcon from '@mui/icons-material/Lock';
 import styles from './Main.module.scss'
 
 import {Options, translate} from "../service/translator";
@@ -27,20 +28,19 @@ export const MainView: React.FC = () => {
     const [loading, setLoading] = React.useState<boolean>(false)
 
     return (
-        // TODO: styling
-
         <div className={styles.mainView}>
             <div className={styles.toolbar}>
-                <h1>Pretty Package</h1>
+                <h2>Pretty Package - get your Node.js dependencies in a clear, readable form.</h2>
+                <h3> No worries, the contents of your package.json never leave your browser <LockIcon/></h3>
             </div>
             <div className={styles.content}>
                 <div className='left'>
-                    <h2>Input</h2>
+                    <h3>Paste the contents of your package.json file here</h3>
                     <TextareaAutosize
                         minRows={20}
                         maxRows={30}
                         aria-label="input"
-                        style={{width: 600}}
+                        style={{width: 500}}
                         value={packageJsonContent}
                         onChange={(event) => setPackageJsonContent(event.target.value)}
                     />
@@ -79,7 +79,7 @@ export const MainView: React.FC = () => {
                                     ...options,
                                     markdown: e.target.checked
                                 })}/>}
-                                label="Output Markdown table"
+                                label="Format as a Markdown table"
                             />
                         </FormGroup>
                         <Button variant="contained" onClick={async () => {
@@ -92,7 +92,8 @@ export const MainView: React.FC = () => {
 
                 </div>
                 <div className={styles.output}>
-                    <h2>Output</h2>
+                    <h3>Your dependencies, formatted</h3>
+                    {!output && !loading && <p>Nothing here yet, paste your package.json and submit</p>}
                     {loading &&
                         <div>
                             <p>Loading...</p>
@@ -100,12 +101,12 @@ export const MainView: React.FC = () => {
                     }
                     {!loading && output &&
                         <div>
-                            <div>
+                            <div className={styles.copyButton}>
                                 <CopyToClipboard text={output}>
                                     <Button variant="contained" endIcon={<ContentCopyIcon/>}>Copy to clipboard</Button>
                                 </CopyToClipboard>
                             </div>
-                            <Box component="span" sx={{display: 'block'}}>{`${output}`}</Box>
+                            <Box component="span" className={styles.outputBox}>{`${output}`}</Box>
                         </div>
                     }
                 </div>
