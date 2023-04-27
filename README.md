@@ -1,46 +1,19 @@
-# Getting Started with Create React App
+# Pretty Package
+Have you ever been asked to provide a list of all the dependencies in your project, along with their licenses?
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+It's often a part of delivery process, especially in consulting or contracting situations. It's also a pain to do by hand.
 
-## Available Scripts
+This project is a simple web-based formatter for `package.json` files to extract the dependencies, 
+along with licenses and versions in a more readable format.
 
-In the project directory, you can run:
+## Usage
+Simply go to https://s-maciejewski.github.io/pretty-package and paste your `package.json` file contents into the text area.
+Choose any of the options you need:
+- include dev dependencies
+- include the version of the package you're importing
+- include the URL to a public npm site for the package (doesn't work for your private dependencies)
+- include the license for the package (if available)
+- output the table as markdown (for easy copy/paste into a README.md or documentation files) - if left unchecked, the output will be CSV
 
-### `npm start`
+Then click the "Format" button, and you'll get a nicely formatted list of your dependencies.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).

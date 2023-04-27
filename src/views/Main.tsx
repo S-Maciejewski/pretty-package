@@ -86,7 +86,8 @@ export const MainView: React.FC = () => {
                             setLoading(true)
                             setOutput(await translate(packageJsonContent, options))
                             setLoading(false)
-                        }}>Submit
+                        }}>
+                            Format
                         </Button>
                     </div>
 
