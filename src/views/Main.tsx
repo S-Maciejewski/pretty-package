@@ -9,6 +9,7 @@ import Box from '@mui/material/Box';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import LockIcon from '@mui/icons-material/Lock';
+import GitHubIcon from '@mui/icons-material/GitHub';
 import styles from './Main.module.scss'
 
 import {Options, translate} from "../service/translator";
@@ -21,8 +22,20 @@ export const MainView: React.FC = () => {
         includeLicense: false,
         markdown: true,
     }
+    const EXAMPLE =
+        `{
+    "name": "pretty-package",
+    "version": "1.0.0",
+    "homepage": "https://s-maciejewski.github.io/pretty-package",
+    "dependencies": {
+        "react": "^18.2.0"
+    },
+    "devDependencies": {
+        "@types/react": "^18.0.38"
+    }
+}`
 
-    const [packageJsonContent, setPackageJsonContent] = React.useState<string>('')
+    const [packageJsonContent, setPackageJsonContent] = React.useState<string>(EXAMPLE)
     const [options, setOptions] = React.useState<Options>(defaultOptions)
     const [output, setOutput] = React.useState<string>('')
     const [loading, setLoading] = React.useState<boolean>(false)
@@ -31,7 +44,8 @@ export const MainView: React.FC = () => {
         <div className={styles.mainView}>
             <div className={styles.toolbar}>
                 <h2>Pretty Package - get your Node.js dependencies in a clear, readable form.</h2>
-                <h3> No worries, the contents of your package.json never leave your browser <LockIcon/></h3>
+                <h3> No worries, the contents of your package.json never leave your browser <LockIcon/> Check out the
+                    repo here <a href={'https://github.com/S-Maciejewski/pretty-package'}><GitHubIcon/></a></h3>
             </div>
             <div className={styles.content}>
                 <div className='left'>
