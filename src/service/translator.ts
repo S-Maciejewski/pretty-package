@@ -37,7 +37,7 @@ const getTableObject = async (packageJsonContent: string, options: Options): Pro
             if (packageJson.devDependencies) {
                 devDependencies.push(...Object.keys(packageJson.devDependencies))
                 table.name.push(...devDependencies)
-                // table.type = table.name.map(name => devDependencies.includes(name) ? 'dev' : 'prod')
+                table.type = table.name.map(name => devDependencies.includes(name) ? 'dev' : 'prod')
             } else {
                 console.warn('No devDependencies found in package.json')
             }
